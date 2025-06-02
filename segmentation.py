@@ -12,3 +12,16 @@ def kmeans_simple(X, k=3, max_iter=100, seed=42):
             break
         centers = new_centers
     return labels, centers
+
+import numpy as np
+
+def segment_satisfaction(df, segment_col, target_col='satisfaction'):
+    segments = df[segment_col].unique()
+    profiles = {}
+    for seg in segments:
+        subset = df[df[segment_col] == seg]
+        profiles[seg] = {
+            'count': len(subset),
+            'satisfaction_rate': (subset[target_col] == 1).mean()
+        }
+    return profiles
