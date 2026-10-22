@@ -1,43 +1,78 @@
-# Cross-Modal Emotion Recognition (FER2013 & RAVDESS)
+# Airline Passenger Satisfaction
 
-This project implements deep learning models (CNN, LSTM, and CNN-LSTM hybrid) to perform **unimodal emotion recognition** using two benchmark datasets:  
-- **FER2013** (Facial Expression Recognition): 35,000+ grayscale facial images in 7 emotion categories.  
-- **RAVDESS** (Ryerson Audio-Visual Database of Emotional Speech and Song): Speech audio clips labeled with 8 emotions.  
+Machine learning assignment for exploring and predicting airline passenger satisfaction from demographic, travel, service-rating, and delay features.
 
-The project also includes a **Gradio-based user interface** for real-time emotion detection from user-provided images or audio files.
+The project covers the complete workflow:
 
----
+- data cleaning and preprocessing;
+- exploratory data analysis and feature engineering;
+- supervised binary classification;
+- PCA-based dimensionality reduction;
+- unsupervised clustering;
+- a Gradio application for interactive predictions.
 
-## Features
-- Trained and evaluated CNN, LSTM, and CNN-LSTM architectures for both datasets.
-- Cross-modality performance comparison revealing modality-specific strengths.
-- Real-time prediction through a simple, interactive web interface.
-- Detailed analysis via classification reports and confusion matrices.
+## Dataset
 
----
+The project uses the [Airline Passenger Satisfaction dataset](https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction/data).
 
-## Datasets
-- **FER2013:** [Kaggle Link](https://www.kaggle.com/datasets/msambare/fer2013)  
-- **RAVDESS:** [Official Link](https://zenodo.org/record/1188976)
+The original data contains 103,904 training rows and 25,976 test rows. The target column is `satisfaction`, encoded during preprocessing as:
 
----
+- `1`: satisfied
+- `0`: neutral or dissatisfied
 
-## How to Run the App
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/<your-username>/Emotion-Recognition-FER2013-RAVDESS.git
-   cd Emotion-Recognition-FER2013-RAVDESS
+The raw dataset files are `train.csv` and `test.csv`. Preprocessed features and labels are stored in the `data/` directory.
 
-2.	Navigate to the app directory:
-    cd app
+## Repository layout
 
-3.	Run the Gradio UI:
-    python app.py
+```text
+.
+├── Preprocessing.ipynb
+├── notebooks/
+│   ├── 01_EDA_FeatureEngineering.ipynb
+│   ├── 02_Supervised_Models.ipynb
+│   └── 03_Unsupervised_Clustering.ipynb
+├── data/
+│   ├── train_full_features.csv
+│   ├── test_full_features.csv
+│   ├── train_pca_features.csv
+│   └── test_pca_features.csv
+├── models/                 # Trained estimators and preprocessing artifacts
+├── html exports/           # Exported notebook reports
+├── Figures/
+├── app/app.py              # Interactive prediction interface
+├── train.csv
+└── test.csv
+```
 
-4.	Open your browser and go to:
-    http://127.0.0.1:7860
+## Running the notebooks
 
-The interface will allow you to:
-	•	Select a trained model.
-	•	Upload a face image or audio sample.
-	•	View the predicted emotion and confidence score.
+Create a Python environment and install the main dependencies:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install numpy pandas scikit-learn scipy matplotlib seaborn joblib xgboost gradio jupyter
+```
+
+Run Jupyter from the repository root:
+
+```bash
+jupyter notebook
+```
+
+Run `Preprocessing.ipynb` first when regenerating the cleaned data and preprocessing artifacts. The analysis notebooks can then be run in numerical order.
+
+## Running the prediction app
+
+The app loads the saved preprocessing artifacts and models from `models/`. Start it from its own directory so the relative model path resolves correctly:
+
+```bash
+cd app
+python app.py
+```
+
+Gradio will print a local URL where the Airline Satisfaction Predictor can be opened in a browser. Select a trained model, enter passenger and flight details, and submit the form to receive a satisfaction prediction.
+
+## Reports and figures
+
+The `html exports/` directory contains browser-readable exports of the preprocessing, exploratory analysis, supervised-model, and clustering notebooks. Supporting workflow diagrams and analysis figures are in `Figures/` and `notebooks/`.
